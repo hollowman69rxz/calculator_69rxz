@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f4f4f9;
+          margin: 0;
+          font-family: Arial, sans-serif;
+        }
+        .converter {
+            background-image: url('https://wallpapersmug.com/download/3840x2160/b1c987/neon-lines-abstract-glowing-lines.jpg');
+            background-size: cover; /* Ensures the image covers the entire button */
+            background-position: center; /* Centers the background image */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .converter h2 {
+            margin-top: 0;
+            text-align: center;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+          color: white;
+          display: block;
+          margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 98%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #777;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back {
+            width: 12%;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #555;
+            border-radius: 5px;
+        }
+        
+        .back:hover {
+           background-color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+    <div class="converter">
+        <div class="nav" id="navbar">
+            <div class="logo" align='center'><h2>Currency Converter</h2></div>
+            <br>
+            <div class="links" align='center'>
+                <a href="./menu/currency.html">Currencies</a>
+                <a href="#about">ABOUT</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" placeholder="Enter amount" />
+        </div>
+        <div class="form-group">
+            <label for="fromCurrency">From:</label>
+            <select id="fromCurrency">
+                <option value="USD">USD - United States Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="toCurrency">To:</label>
+            <select id="toCurrency">
+                <option value="USD">USD - United States Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button onclick="convertCurrency()">Convert</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="back" id="back"><a href="../index.html">BACK</a></div>
+    </div>
+</div>
+    <script>
+        async function getExchangeRates() {
+            const apiKey = '170a095020c34a7e51f83c50';  // Replace 'YOUR_API_KEY' with your actual API key from ExchangeRate-API
+            const url = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data.conversion_rates;
+            } catch (error) {
+                console.error('Error fetching exchange rates:', error);
+            }
+        }
+
+        async function convertCurrency() {
+            const amount = document.getElementById('amount').value;
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+
+            if (amount === "" || isNaN(amount)) {
+                alert("Please enter a valid amount");
+                return;
+            }
+
+            const rates = await getExchangeRates();
+
+            if (!rates) {
+                document.getElementById('result').innerText = 'Error fetching exchange rates. Please try again later.';
+                return;
+            }
+
+            const fromRate = rates[fromCurrency];
+            const toRate = rates[toCurrency];
+
+            const convertedAmount = (amount / fromRate) * toRate;
+
+            document.getElementById('result').innerText = `Converted amount: ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        }
+    </script>
+</body>
+</html>
