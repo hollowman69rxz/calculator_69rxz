@@ -17,7 +17,7 @@ Kalkulator ini dirancang untuk memberikan pengalaman pengguna yang menarik denga
 ## Instalasi
 
 1. **Clone repositori**:
-   git clone https://github.com/hollowman69rxz/calculator_69rxz.git
+   git clone git@github.com:hollowman69rxz/calculator_69rxz.git
 2. **Masuk ke direktori proyek**:
   ** _cd repository-name_**
 3. Buka file index.html di browser untuk melihat kalkulator berfungsi.
